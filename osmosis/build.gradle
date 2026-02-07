@@ -12,6 +12,7 @@ dependencies {
     implementation project(':osmosis-core')
     implementation project(':osmosis-dataset')
     implementation project(':osmosis-extract')
+    implementation project(':osmosis-kakasi')
     implementation project(':osmosis-pbf')
     implementation project(':osmosis-pbf2')
     implementation project(':osmosis-pgsimple')

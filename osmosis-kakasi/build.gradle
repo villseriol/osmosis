@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':osmosis-core')
+    implementation project(':osmosis-xml')
+    testImplementation project(':osmosis-testutil')
+}
