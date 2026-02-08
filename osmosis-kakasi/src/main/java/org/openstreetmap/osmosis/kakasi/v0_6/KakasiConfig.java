@@ -28,8 +28,17 @@ public class KakasiConfig {
     private Charset inputCharset = Charset.defaultCharset();
     private Charset outputCharset = Charset.defaultCharset();
     private Set<KakasiTranslation> translations = new HashSet<>();
+    private Set<String> dictionaries = new HashSet<>();
     private boolean isSeparatorEnabled;
     private String separator;
+
+    public Set<String> getDictionaries() {
+        return dictionaries;
+    }
+
+    public void setDictionaries(Set<String> dictionaries) {
+        this.dictionaries = dictionaries;
+    }
 
     public boolean isSeparatorEnabled() {
         return isSeparatorEnabled;
@@ -86,6 +95,10 @@ public class KakasiConfig {
 
         for (KakasiTranslation t : translations) {
             arguments.add(String.format("-%s%s", t.getFrom().getCode(), t.getTo().getCode()));
+        }
+
+        for (String d : dictionaries) {
+            arguments.add(d);
         }
 
         return arguments.toArray(new String[] {});

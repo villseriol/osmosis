@@ -135,7 +135,7 @@ public class Latin1Transformer implements KakasiTransformer {
         map.put('Ø', "O");
         map.put('ø', "o");
         map.put('Œ', "OE");
-        map.put('œ', "oe");
+        map.put('œ', "oe"); // Other characters
 
         FULLWIDTH_TO_ASCII = Collections.unmodifiableMap(map);
     }
