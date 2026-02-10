@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class UnaccentTransformerTest {
-    private static final UnaccentTransformer TRANSFORMER = new UnaccentTransformer();
+    private static final Transformer TRANSFORMER = UnaccentTransformer.getInstance();
 
     @Test
     public void testLatinCharacters() {

@@ -1,6 +1,12 @@
 package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
-public class DuplicateSpaceTransformer implements KakasiTransformer {
+public class DuplicateSpaceTransformer implements Transformer {
+    private static DuplicateSpaceTransformer instance;
+
+    private DuplicateSpaceTransformer() {
+        super();
+    }
+
     @Override
     public String transform(String input) {
         return input
@@ -9,5 +15,13 @@ public class DuplicateSpaceTransformer implements KakasiTransformer {
                 // remove all spaces following or preceding a bracket
                 .replaceAll("([\\(\\[\\{<])\\s+", "$1")
                 .replaceAll("\\s+([\\)\\]\\}>])", "$1");
+    }
+
+    public static Transformer getInstance() {
+        if (instance == null) {
+            instance = new DuplicateSpaceTransformer();
+        }
+
+        return instance;
     }
 }

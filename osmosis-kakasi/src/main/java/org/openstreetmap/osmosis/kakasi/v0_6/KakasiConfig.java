@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class KakasiConfig {
-    private KakasiCharset inputCharset = KakasiCharset.EUC;
-    private KakasiCharset outputCharset = KakasiCharset.UTF8;
+    private KakasiInOutEncoding inputCharset;
+    private KakasiInOutEncoding outputCharset;
     private Set<KakasiTranslation> translations = new HashSet<>();
     private Set<String> dictionaries = new HashSet<>();
     private boolean isSeparatorEnabled;
@@ -16,8 +16,8 @@ public class KakasiConfig {
     public static KakasiConfig createDefaultConfig() {
         return new KakasiConfig() {
             {
-                setInputCharset(KakasiCharset.EUC);
-                setOutputCharset(KakasiCharset.UTF8);
+                setInputCharset(KakasiInOutEncoding.EUC);
+                setOutputCharset(KakasiInOutEncoding.UTF8);
                 setSeparatorEnabled(true);
                 setTranslations(
                         new HashSet<>() {
@@ -58,19 +58,19 @@ public class KakasiConfig {
         return separator;
     }
 
-    public KakasiCharset getInputCharset() {
+    public KakasiInOutEncoding getInputCharset() {
         return inputCharset;
     }
 
-    public void setInputCharset(KakasiCharset inputCharset) {
+    public void setInputCharset(KakasiInOutEncoding inputCharset) {
         this.inputCharset = inputCharset;
     }
 
-    public KakasiCharset getOutputCharset() {
+    public KakasiInOutEncoding getOutputCharset() {
         return outputCharset;
     }
 
-    public void setOutputCharset(KakasiCharset outputCharset) {
+    public void setOutputCharset(KakasiInOutEncoding outputCharset) {
         this.outputCharset = outputCharset;
     }
 
@@ -84,8 +84,13 @@ public class KakasiConfig {
 
     public String[] getArguments() {
         List<String> arguments = new ArrayList<>();
-        arguments.add(String.format("-i%s", inputCharset.getCode()));
-        arguments.add(String.format("-o%s", outputCharset.getCode()));
+        if (inputCharset != null) {
+            arguments.add(String.format("-i%s", inputCharset.getCode()));
+        }
+
+        if (outputCharset != null) {
+            arguments.add(String.format("-o%s", outputCharset.getCode()));
+        }
 
         if (isSeparatorEnabled) {
             arguments.add("-s");

@@ -1,10 +1,7 @@
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,16 +15,17 @@ import org.openstreetmap.osmosis.core.domain.v0_6.EntityType;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TransformerUtil;
 
 public class KakasiTask implements SinkSource {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Sink sink;
-    private String userDictDir;
+    private String dictPath;
     private String tagRegex;
     private KakasiConfig config = KakasiConfig.createDefaultConfig();
 
-    public KakasiTask(final String userDictDir, final String tagRegex) {
-        this.userDictDir = userDictDir;
+    public KakasiTask(final String dictPath, final String tagRegex) {
+        this.dictPath = dictPath;
         this.tagRegex = tagRegex;
     }
 
@@ -47,7 +45,7 @@ public class KakasiTask implements SinkSource {
             String key = tag.getKey();
             if (key.matches(tagRegex)) {
                 String original = tag.getValue();
-                String value = Kakasi.run(tag.getValue());
+                String value = TransformerUtil.post(Kakasi.run(TransformerUtil.pre(original)));
                 Tag next = new Tag(key, value);
 
                 logger.log(Level.FINER, String.format("%s: (%s, %s)", key, original, value));
@@ -69,25 +67,23 @@ public class KakasiTask implements SinkSource {
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
 
-        if (userDictDir != null && !"".equals(userDictDir)) {
-            try {
-                Path dir = Paths.get(userDictDir);
+        if (dictPath != null && !"".equals(dictPath)) {
                 Set<String> dictionaries = new HashSet<>();
-                try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-                    for (Path file : stream) {
-                        dictionaries.add(String.valueOf(file.getFileName()));
+
+                logger.info("Loading user dictionaries");
+
+                String[] paths = dictPath.split(";");
+                for (String part : paths) {
+                    Path path = Path.of(part);
+
+                    if (Files.exists(path)) {
+                        dictionaries.add(part);
+                    } else {
+                        logger.log(Level.SEVERE, String.format("User dictionary does not exist: %s", path));
                     }
                 }
 
-                logger.info("Loaded user dictionaries:");
-                for (String d : dictionaries) {
-                    logger.info(d);
-                }
-
                 config.setDictionaries(dictionaries);
-            } catch (IOException e) {
-                logger.log(Level.WARNING, String.format("Failed to load user dictionary: %s", userDictDir));
-            }
         }
 
         Kakasi.configure(config);

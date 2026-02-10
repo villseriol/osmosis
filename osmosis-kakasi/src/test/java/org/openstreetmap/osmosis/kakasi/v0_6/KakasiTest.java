@@ -43,11 +43,11 @@ public class KakasiTest extends AbstractDataTest {
 
     @Test
     public void testKatakana() {
-        assertEquals("apolo bakery", Kakasi.run("アポロベーカリー"));
+        assertEquals("aporobe^kari^", Kakasi.run("アポロベーカリー"));
     }
 
     @Test
     public void testAll() {
-        assertEquals("Fullwidth & kanji aou", Kakasi.run("Ｆｕｌｌｗｉｄｔｈ ＆ 漢字 äöü"));
+        assertEquals("Fullwidth & kanji", Kakasi.run("Ｆｕｌｌｗｉｄｔｈ ＆ 漢字"));
     }
 }

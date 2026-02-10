@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 
 public class Latin1TransformerTest {
-    private static final Latin1Transformer TRANSFORMER = new Latin1Transformer();
+    private static final Transformer TRANSFORMER = Latin1Transformer.getInstance();
 
     @Test
     public void testAll() {
