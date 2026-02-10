@@ -1,36 +1,38 @@
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class KakasiConfig {
-    public static KakasiConfig DEFAULT_CONFIG = new KakasiConfig() {
-        {
-            setInputCharset(Charset.forName("utf8"));
-            setOutputCharset(Charset.forName("utf8"));
-            setSeparatorEnabled(true);
-            setTranslations(
-                    new HashSet<>() {
-                        {
-                            add(new KakasiTranslation(KakasiCharset.HIRAGANA, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KANJI, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KATAKANA_JIS, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.SIGN, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KATAKANA, KakasiCharset.ASCII));
-                        }
-                    });
-        }
-    };
-
-    private Charset inputCharset = Charset.defaultCharset();
-    private Charset outputCharset = Charset.defaultCharset();
+    private KakasiCharset inputCharset = KakasiCharset.EUC;
+    private KakasiCharset outputCharset = KakasiCharset.UTF8;
     private Set<KakasiTranslation> translations = new HashSet<>();
     private Set<String> dictionaries = new HashSet<>();
     private boolean isSeparatorEnabled;
     private String separator;
+
+    public static KakasiConfig createDefaultConfig() {
+        return new KakasiConfig() {
+            {
+                setInputCharset(KakasiCharset.EUC);
+                setOutputCharset(KakasiCharset.UTF8);
+                setSeparatorEnabled(true);
+                setTranslations(
+                        new HashSet<>() {
+                            {
+                                add(new KakasiTranslation(KakasiCharsetCategory.HIRAGANA, KakasiCharsetCategory.ASCII));
+                                add(new KakasiTranslation(KakasiCharsetCategory.KANJI, KakasiCharsetCategory.ASCII));
+                                add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA_JIS,
+                                        KakasiCharsetCategory.ASCII));
+                                add(new KakasiTranslation(KakasiCharsetCategory.SIGN, KakasiCharsetCategory.ASCII));
+                                add(new KakasiTranslation(KakasiCharsetCategory.KATAKANA, KakasiCharsetCategory.ASCII));
+                            }
+                        });
+            }
+        };
+    }
 
     public Set<String> getDictionaries() {
         return dictionaries;
@@ -56,19 +58,19 @@ public class KakasiConfig {
         return separator;
     }
 
-    public Charset getInputCharset() {
+    public KakasiCharset getInputCharset() {
         return inputCharset;
     }
 
-    public void setInputCharset(Charset inputCharset) {
+    public void setInputCharset(KakasiCharset inputCharset) {
         this.inputCharset = inputCharset;
     }
 
-    public Charset getOutputCharset() {
+    public KakasiCharset getOutputCharset() {
         return outputCharset;
     }
 
-    public void setOutputCharset(Charset outputCharset) {
+    public void setOutputCharset(KakasiCharset outputCharset) {
         this.outputCharset = outputCharset;
     }
 
@@ -82,8 +84,8 @@ public class KakasiConfig {
 
     public String[] getArguments() {
         List<String> arguments = new ArrayList<>();
-        arguments.add(String.format("-i%s", inputCharset.name()));
-        arguments.add(String.format("-o%s", outputCharset.name()));
+        arguments.add(String.format("-i%s", inputCharset.getCode()));
+        arguments.add(String.format("-o%s", outputCharset.getCode()));
 
         if (isSeparatorEnabled) {
             arguments.add("-s");

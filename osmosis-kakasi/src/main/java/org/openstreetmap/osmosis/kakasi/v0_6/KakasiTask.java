@@ -1,7 +1,6 @@
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,28 +24,11 @@ public class KakasiTask implements SinkSource {
     private Sink sink;
     private String userDictDir;
     private String tagRegex;
-    private KakasiConfig config = new KakasiConfig() {
-        {
-            setInputCharset(Charset.forName("utf8"));
-            setOutputCharset(Charset.forName("utf8"));
-            setSeparatorEnabled(true);
-            setTranslations(
-                    new HashSet<>() {
-                        {
-                            add(new KakasiTranslation(KakasiCharset.HIRAGANA, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KANJI, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KATAKANA_JIS, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.SIGN, KakasiCharset.ASCII));
-                            add(new KakasiTranslation(KakasiCharset.KATAKANA, KakasiCharset.ASCII));
-                        }
-                    });
-        }
-    };
+    private KakasiConfig config = KakasiConfig.createDefaultConfig();
 
     public KakasiTask(final String userDictDir, final String tagRegex) {
         this.userDictDir = userDictDir;
         this.tagRegex = tagRegex;
-
     }
 
     @Override

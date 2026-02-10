@@ -1,19 +1,19 @@
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 public class KakasiTranslation {
-    private final KakasiCharset from;
-    private final KakasiCharset to;
+    private final KakasiCharsetCategory from;
+    private final KakasiCharsetCategory to;
 
-    public KakasiTranslation(KakasiCharset from, KakasiCharset to) {
+    public KakasiTranslation(KakasiCharsetCategory from, KakasiCharsetCategory to) {
         this.from = from;
         this.to = to;
     }
 
-    public KakasiCharset getFrom() {
+    public KakasiCharsetCategory getFrom() {
         return from;
     }
 
-    public KakasiCharset getTo() {
+    public KakasiCharsetCategory getTo() {
         return to;
     }
 }

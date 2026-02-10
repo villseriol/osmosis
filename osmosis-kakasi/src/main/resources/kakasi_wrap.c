@@ -210,86 +210,76 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 
     /* Includes the header in the wrapper code */
     #include "libkakasi.h"
+    #include <stdlib.h>
+    #include <string.h>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jint jarg1, jobjectArray jarg2) {
+SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1getopt_1argv(JNIEnv *jenv, jclass jcls, jobjectArray jarg1) {
   jint jresult = 0 ;
   int arg1 ;
   char **arg2 = (char **) 0 ;
-  jint size2 ;
   int result;
   
   (void)jenv;
   (void)jcls;
-  arg1 = (int)jarg1; 
   {
-    int i = 0;
-    if (jarg2) {
-      size2 = (*jenv)->GetArrayLength(jenv, jarg2);
-      
-      
-      
-      arg2 = (char **)malloc((size2+1) * sizeof(char *));
-      
-      for (i = 0; i<size2; i++) {
-        jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, jarg2, i);
-        const char *c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
-        
-        
-        
-        arg2[i] = (char *)malloc((strlen(c_string)+1) * sizeof(const char *));
-        
-        strcpy(arg2[i], c_string);
-        (*jenv)->ReleaseStringUTFChars(jenv, j_string, c_string);
-        (*jenv)->DeleteLocalRef(jenv, j_string);
-      }
-      arg2[i] = 0;
-    } else {
-      arg2 = 0;
-      size2 = 0;
+    int i, len;
+    if (jarg1 == (jobjectArray)0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null array");
+      return 0;
     }
+    len = (int)(*jenv)->GetArrayLength(jenv, jarg1);
+    if (len < 0) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "array length negative");
+      return 0;
+    }
+    arg2 = (char **) malloc((len+1)*sizeof(char *));
+    if (arg2 == NULL) {
+      SWIG_JavaThrowException(jenv, SWIG_JavaOutOfMemoryError, "memory allocation failed");
+      return 0;
+    }
+    arg1 = len;
+    for (i = 0; i < len; i++) {
+      jstring j_string = (jstring)(*jenv)->GetObjectArrayElement(jenv, jarg1, (jsize)i);
+      const char *c_string = (*jenv)->GetStringUTFChars(jenv, j_string, 0);
+      arg2[i] = (char *)c_string;
+    }
+    arg2[i] = NULL;
   }
   result = (int)kakasi_getopt_argv(arg1,arg2);
   jresult = (jint)result; 
   {
-    int i;
-    for (i=0; i<size2; i++)
-    
-    
-    
-    
-    free(arg2[i]);
-    free(arg2);
-    
+    free((void *)arg2);
   }
   return jresult;
 }
 
 
-SWIGEXPORT jstring JNICALL Java_org_openstreetmap_osmosis_kakasi_common_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jstring JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1do(JNIEnv *jenv, jclass jcls, jbyteArray jarg1) {
   jstring jresult = 0 ;
   char *arg1 = (char *) 0 ;
   char *result = 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = 0;
-  if (jarg1) {
-    arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
-    if (!arg1) return 0;
+  {
+    arg1 = (char *) (*jenv)->GetByteArrayElements(jenv, jarg1, 0); 
   }
   result = (char *)kakasi_do(arg1);
   if (result) jresult = (*jenv)->NewStringUTF(jenv, (const char *)result);
-  if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
+  {
+    (*jenv)->ReleaseByteArrayElements(jenv, jarg1, (jbyte *) arg1, 0); 
+  }
+  
   return jresult;
 }
 
 
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_kakasiJNI_kakasi_1close_1kanwadict(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1close_1kanwadict(JNIEnv *jenv, jclass jcls) {
   jint jresult = 0 ;
   int result;
   
@@ -301,7 +291,7 @@ SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_kakasiJNI_k
 }
 
 
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_kakasiJNI_kakasi_1free(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1free(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jint jresult = 0 ;
   char *arg1 = (char *) 0 ;
   int result;

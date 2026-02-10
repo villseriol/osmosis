@@ -2,28 +2,44 @@ package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.junit.Test;
 
 public class UnaccentTransformerTest {
     private static final UnaccentTransformer TRANSFORMER = new UnaccentTransformer();
 
     @Test
-    public void testAll() {
-        Map<String, String> cases = new LinkedHashMap<>();
+    public void testLatinCharacters() {
+        ensure("äöü", "aou");
+    }
 
-        for (Map.Entry<String, String> entry : cases.entrySet()) {
-            String input = entry.getKey();
-            String expected = entry.getValue();
-            String actual = TRANSFORMER.transform(input);
+    @Test
+    public void testSimpleAsciiCharacters() {
+        ensureUnchanged("test");
+        ensureUnchanged("test (villseriol)");
+    }
 
-            assertEquals(
-                    "Failed for character U+"
-                            + Integer.toHexString(input.codePointAt(0)).toUpperCase(),
-                    expected,
-                    actual);
-        }
+    @Test
+    public void testJapaneseCharacters() {
+        ensureUnchanged("アポロベーカリー");
+    }
+
+    /**
+     * Assert that the input is not changed after transformation.
+     *
+     * @param input the input string
+     */
+    private void ensureUnchanged(String input) {
+        ensure(input, input);
+    }
+
+    /**
+     * Assert that the input equals the output after transformation.
+     *
+     * @param input the input string
+     * @param output the output string
+     */
+    private void ensure(String input, String output) {
+        String actual = TRANSFORMER.transform(input);
+        assertEquals(output, actual);
     }
 }

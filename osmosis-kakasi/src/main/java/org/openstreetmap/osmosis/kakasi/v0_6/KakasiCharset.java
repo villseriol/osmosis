@@ -1,29 +1,31 @@
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 public enum KakasiCharset {
-    ASCII("a", "Known as \"ascii\" character set."),
-    JISROMAN("j", "Known as \"jis roman\" character set."),
-    GRAPHIC("g", "It is the DEC graphic character set."),
-    KATAKANA("k", "JIS x0201, defined as part of the GR character set."),
-    KANJI("J", "JIS x0208 characters included between 16 and 94 sections."),
-    HIRAGANA("H", "JIS x0208 characters included in section 4 (Hiragana)"),
-    KATAKANA_JIS("K", "JIS x0208 characters included in section 5 (Katakana)"),
-    SIGN("E",
-            "JIS x0208 characters included in section 1,2,3,6,7, and 8. (Note that section 9-15 are undefined in JIS x0208.)");
+    //   jis \-\- Widely used on the internet. (Ex: fj, jp, .. newsgroups)
+    //          Derived from ISO\-2022 coding manner.
+    //          newjis: JISx0208 (1983) invoked by ESC\-$\-B.
+    //          oldjis: JISx0208 (1978) invoked by ESC\-$\-@.
+    JIS("jis"),
+    //   euc,dec \-\- Often used in UNIX like computers. JISx0208 is
+    //          assigned to GR ( MSB is 1 ). The major difference between
+    //          euc and dec is assignment of JISx0201 KATAKANA and
+    //          the DEC graphic character.
+    EUC("euc"),
+    DEC("dec"),
+    //   sjis \-\- Defined by Microsoft Corp. Widely used on the personal
+    //          computers ( MSDOS, Mac, .. )
+    SJIS("sjis"),
+    //    utf8 \-\- Current international standard.  All modern OSs use this
+    //          encoding of the Unicode character set as the default.
+    UTF8("utf8");
 
     private final String code;
-    private final String description;
 
-    private KakasiCharset(String code, String description) {
+    private KakasiCharset(final String code) {
         this.code = code;
-        this.description = description;
     }
 
     public String getCode() {
         return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

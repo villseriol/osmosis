@@ -2,16 +2,17 @@ package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
 import java.text.Normalizer;
 
+import org.openstreetmap.osmosis.kakasi.common.apache3.compat.StringUtils;
+
 public class UnaccentTransformer implements KakasiTransformer {
     @Override
-    public String transform(String input) {
-        if (input == null)
-            return null;
+    public String transform(final String input) {
+        // default implementation decomposes accented characters into (base character + accent)
+        final String compatibility = StringUtils.stripAccents(input);
 
-        // Step 1: Decompose Unicode into base + combining marks
-        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        // re-compose any remaining accented characters
+        final StringBuilder composed = new StringBuilder(Normalizer.normalize(compatibility, Normalizer.Form.NFC));
 
-        // Step 2: Remove all combining marks
-        return normalized.replaceAll("\\p{M}", "");
+        return composed.toString();
     }
 }
