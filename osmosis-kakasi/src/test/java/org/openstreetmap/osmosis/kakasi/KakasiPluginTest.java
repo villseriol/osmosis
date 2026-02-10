@@ -12,7 +12,6 @@ public class KakasiPluginTest extends AbstractDataTest {
     public void testHospitalNode() throws IOException {
         File sourceFile = dataUtils.createDataFile("385218500.xml");
         File outputFile = dataUtils.newFile();
-        File largeDictionary = dataUtils.createDataFile("dictionary/SKK-JISYO.L");
 
         Osmosis.run(
                 new String[] {
@@ -21,7 +20,6 @@ public class KakasiPluginTest extends AbstractDataTest {
                         sourceFile.getPath(),
                         "--kakasi",
                         "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
-                        "dictPath=" + largeDictionary.getPath(),
                         "--write-xml",
                         outputFile.getPath()
                 });
