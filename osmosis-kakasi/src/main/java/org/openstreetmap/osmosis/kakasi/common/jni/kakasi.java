@@ -21,8 +21,4 @@ public class kakasi {
     return kakasiJNI.kakasi_close_kanwadict();
   }
 
-  public static int kakasi_free(String p) {
-    return kakasiJNI.kakasi_free(p);
-  }
-
 }

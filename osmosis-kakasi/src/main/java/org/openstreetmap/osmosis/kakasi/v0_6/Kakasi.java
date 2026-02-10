@@ -74,7 +74,7 @@ public class Kakasi {
         byte last = input[input.length - 1];
         if (0x00 != last) {
             ByteArrayOutputStream terminated = new ByteArrayOutputStream(input.length + 1);
-            terminated.write(input, 0, input.length);
+            terminated.writeBytes(input);
             terminated.write(0x00);
 
             return terminated.toByteArray();

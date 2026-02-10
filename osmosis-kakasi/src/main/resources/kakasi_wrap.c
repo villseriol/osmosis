@@ -291,25 +291,6 @@ SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJ
 }
 
 
-SWIGEXPORT jint JNICALL Java_org_openstreetmap_osmosis_kakasi_common_jni_kakasiJNI_kakasi_1free(JNIEnv *jenv, jclass jcls, jstring jarg1) {
-  jint jresult = 0 ;
-  char *arg1 = (char *) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = 0;
-  if (jarg1) {
-    arg1 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg1, 0);
-    if (!arg1) return 0;
-  }
-  result = (int)kakasi_free(arg1);
-  jresult = (jint)result; 
-  if (arg1) (*jenv)->ReleaseStringUTFChars(jenv, jarg1, (const char *)arg1);
-  return jresult;
-}
-
-
 #ifdef __cplusplus
 }
 #endif

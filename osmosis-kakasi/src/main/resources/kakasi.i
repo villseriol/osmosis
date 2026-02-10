@@ -11,7 +11,6 @@
 
 %apply char *BYTE { char *str };
 
-
 /* -------------------------------------------------------------
  * SWIG library containing argc and argv multi-argument typemaps
  * ------------------------------------------------------------- */
@@ -53,4 +52,3 @@
 int kakasi_getopt_argv(int argc, char **argv);
 char *kakasi_do(char *str);
 int kakasi_close_kanwadict(void);
-int kakasi_free(char *p);
