@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 
 /**
  * A small subset of functionality copied straight from the apache3 commons library.
- *
- * @see org.apache.commons.lang3.StringUtils
  */
 public class StringUtils {
     /**
