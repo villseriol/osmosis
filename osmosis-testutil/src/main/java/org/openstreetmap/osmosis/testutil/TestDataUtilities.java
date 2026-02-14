@@ -22,7 +22,7 @@ import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 
 /**
  * Provides re-usable functionality for utilising data files within junit tests.
- * 
+ *
  * @author Brett Henderson
  */
 public class TestDataUtilities extends TemporaryFolder {
@@ -34,12 +34,28 @@ public class TestDataUtilities extends TemporaryFolder {
 	 * Obtains the data file with the specified name. The name is a path
 	 * relative to the data input directory. The returned file will have any
 	 * occurrences of %VERSION% replaced with the current version.
-	 * 
+	 *
 	 * @param dataFileName
 	 *            The name of the data file to be loaded.
 	 * @return The file object pointing to the data file.
 	 */
 	public File createDataFile(String dataFileName) {
+		return createDataFile(dataFileName, UTF8);
+	}
+
+
+	/**
+	 * Obtains the data file with the specified name. The name is a path
+	 * relative to the data input directory. The returned file will have any
+	 * occurrences of %VERSION% replaced with the current version.
+	 *
+	 * @param dataFileName
+	 *            The name of the data file to be loaded.
+	 * @param encoding
+	 *            The encoding of the data file to be loaded.
+	 * @return The file object pointing to the data file.
+	 */
+	public File createDataFile(String dataFileName, Charset encoding) {
 		try {
 			BufferedReader dataReader;
 			BufferedWriter dataWriter;
@@ -48,11 +64,11 @@ public class TestDataUtilities extends TemporaryFolder {
 
 			// Open the data template file.
 			dataReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(
-					"/data/template/" + dataFileName), UTF8));
+					"/data/template/" + dataFileName), encoding));
 
 			// Create a temporary file and open it.
 			tmpFile = newFile();
-			dataWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), UTF8));
+			dataWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), encoding));
 
 			// Copy all data into the temp file replacing the version string.
 			while ((line = dataReader.readLine()) != null) {
@@ -74,7 +90,7 @@ public class TestDataUtilities extends TemporaryFolder {
 	/**
 	 * Obtains the data file with the specified name. The name is a path
 	 * relative to the data input directory.
-	 * 
+	 *
 	 * @param systemPropertyName
 	 *            The system property to use for getting the file name. If this
 	 *            doesn't exist, the dataFileName is used instead.
@@ -95,40 +111,40 @@ public class TestDataUtilities extends TemporaryFolder {
 		// No system property is available so use the provided file name.
 		return createDataFile(dataFileName);
 	}
-	
-	
+
+
 	private void copyFiles(File from, File to) throws IOException {
 		byte[] buffer;
 		int bytesRead;
 		BufferedInputStream isFrom;
 		BufferedOutputStream osTo;
-		
+
 		buffer = new byte[4096];
-		
+
 		isFrom = new BufferedInputStream(new FileInputStream(from));
 		osTo = new BufferedOutputStream(new FileOutputStream(to));
-		
+
 		while ((bytesRead = isFrom.read(buffer)) >= 0) {
 			osTo.write(buffer, 0, bytesRead);
 		}
-		
+
 		isFrom.close();
 		osTo.close();
 	}
-	
-	
+
+
 	private void handleInequalFiles(File file1, File file2, long failureoffset) throws IOException {
 		File file1Copy;
 		File file2Copy;
-		
+
 		// We must create copies of the files because the originals will be
 		// cleaned up at the completion of the test.
 		file1Copy = File.createTempFile("junit", null);
 		file2Copy = File.createTempFile("junit", null);
-		
+
 		copyFiles(file1, file1Copy);
 		copyFiles(file2, file2Copy);
-		
+
 		Assert.fail("File " + file1Copy + " and file " + file2Copy + " are not equal at file offset " + failureoffset
 				+ ".");
 	}
@@ -136,7 +152,7 @@ public class TestDataUtilities extends TemporaryFolder {
 
 	/**
 	 * Validates the contents of two files for equality.
-	 * 
+	 *
 	 * @param file1
 	 *            The first file.
 	 * @param file2
@@ -172,7 +188,7 @@ public class TestDataUtilities extends TemporaryFolder {
 
 	/**
 	 * Compresses the contents of a file into a new compressed file.
-	 * 
+	 *
 	 * @param inputFile
 	 *            The uncompressed input file.
 	 * @param outputFile
