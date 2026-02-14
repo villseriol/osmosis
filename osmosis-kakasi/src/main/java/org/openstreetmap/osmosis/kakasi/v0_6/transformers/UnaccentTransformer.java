@@ -4,12 +4,14 @@ import java.text.Normalizer;
 
 import org.openstreetmap.osmosis.kakasi.common.apache3.compat.StringUtils;
 
+
 public class UnaccentTransformer implements Transformer {
     private static UnaccentTransformer instance;
 
     private UnaccentTransformer() {
         super();
     }
+
 
     @Override
     public String transform(final String input) {
@@ -21,6 +23,7 @@ public class UnaccentTransformer implements Transformer {
 
         return composed.toString();
     }
+
 
     public static Transformer getInstance() {
         if (instance == null) {

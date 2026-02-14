@@ -15,3 +15,8 @@ gcc -fPIC -shared kakasi_wrap.c \
   -L"/usr/lib" -lkakasi \
   -o libkakasi_jni.so
 ```
+
+```
+pkill -f '.*GradleDaemon.*'
+sudo update-alternatives --config java
+```

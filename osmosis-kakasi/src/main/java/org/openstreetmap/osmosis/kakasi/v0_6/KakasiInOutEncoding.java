@@ -22,8 +22,7 @@ public enum KakasiInOutEncoding {
      * The major difference between EUC and DEC is the assignment of
      * JIS X 0201 Katakana and DEC graphic characters.
      */
-    EUC("euc"),
-    DEC("dec"),
+    EUC("euc"), DEC("dec"),
     /**
      * Shift_JIS — defined by Microsoft.
      * <p>
@@ -43,6 +42,7 @@ public enum KakasiInOutEncoding {
     private KakasiInOutEncoding(final String code) {
         this.code = code;
     }
+
 
     public String getCode() {
         return code;

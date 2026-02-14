@@ -43,6 +43,7 @@ public enum KakasiCharsetCategory {
         this.code = code;
     }
 
+
     public String getCode() {
         return code;
     }

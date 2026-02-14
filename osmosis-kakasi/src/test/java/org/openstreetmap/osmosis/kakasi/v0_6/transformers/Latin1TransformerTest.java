@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+
 public class Latin1TransformerTest {
     private static final Transformer TRANSFORMER = Latin1Transformer.getInstance();
 
@@ -145,10 +146,7 @@ public class Latin1TransformerTest {
             String expected = entry.getValue();
             String actual = TRANSFORMER.transform(input);
 
-            assertEquals(
-                    "Failed for character U+"
-                            + Integer.toHexString(input.codePointAt(0)).toUpperCase(),
-                    expected,
+            assertEquals("Failed for character U+" + Integer.toHexString(input.codePointAt(0)).toUpperCase(), expected,
                     actual);
         }
     }

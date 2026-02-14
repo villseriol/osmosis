@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Latin1Transformer implements Transformer {
     public static final Map<Character, String> FULLWIDTH_TO_ASCII;
     public static Latin1Transformer instance;
@@ -156,6 +157,7 @@ public class Latin1Transformer implements Transformer {
 
         return sb.toString();
     }
+
 
     public static Transformer getInstance() {
         if (instance == null) {

@@ -17,6 +17,7 @@ import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TransformerUtil;
 
+
 public class KakasiTask implements SinkSource {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Sink sink;
@@ -28,6 +29,7 @@ public class KakasiTask implements SinkSource {
         this.dictPath = dictPath;
         this.tagRegex = tagRegex;
     }
+
 
     @Override
     public void process(EntityContainer entityContainer) {
@@ -63,41 +65,45 @@ public class KakasiTask implements SinkSource {
         sink.process(writeableEntityContainer);
     }
 
+
     @Override
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
 
         if (dictPath != null && !"".equals(dictPath)) {
-                Set<String> dictionaries = new HashSet<>();
+            Set<String> dictionaries = new HashSet<>();
 
-                logger.info("Loading user dictionaries");
+            logger.info("Loading user dictionaries");
 
-                String[] paths = dictPath.split(";");
-                for (String part : paths) {
-                    Path path = Path.of(part);
+            String[] paths = dictPath.split(";");
+            for (String part : paths) {
+                Path path = Path.of(part);
 
-                    if (Files.exists(path)) {
-                        dictionaries.add(part);
-                    } else {
-                        logger.log(Level.SEVERE, String.format("User dictionary does not exist: %s", path));
-                    }
+                if (Files.exists(path)) {
+                    dictionaries.add(part);
+                } else {
+                    logger.log(Level.SEVERE, String.format("User dictionary does not exist: %s", path));
                 }
+            }
 
-                config.setDictionaries(dictionaries);
+            config.setDictionaries(dictionaries);
         }
 
         Kakasi.configure(config);
     }
+
 
     @Override
     public void complete() {
         sink.complete();
     }
 
+
     @Override
     public void close() {
         sink.close();
     }
+
 
     @Override
     public void setSink(Sink sink) {

@@ -3,6 +3,7 @@ package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TransformerUtil {
     private static List<Transformer> inputTransformers = new ArrayList<>();
     private static List<Transformer> outputTransformers = new ArrayList<>();
@@ -23,6 +24,7 @@ public class TransformerUtil {
         // load the transformers here (for eventual refactor)
     }
 
+
     public static String pre(final String input) {
         String out = input;
         for (Transformer t : inputTransformers) {
@@ -31,6 +33,7 @@ public class TransformerUtil {
 
         return out;
     }
+
 
     public static String post(final String input) {
         String out = input;
@@ -41,11 +44,13 @@ public class TransformerUtil {
         return out;
     }
 
+
     public static void registerOutputTransformer(Transformer transformer) {
         if (transformer != null) {
             outputTransformers.add(transformer);
         }
     }
+
 
     public static void registerInputTransformer(Transformer transformer) {
         if (transformer != null) {

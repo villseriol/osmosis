@@ -7,10 +7,12 @@ public class TrimTransformer implements Transformer {
         super();
     }
 
+
     @Override
     public String transform(String input) {
         return input.trim();
     }
+
 
     public static Transformer getInstance() {
         if (instance == null) {

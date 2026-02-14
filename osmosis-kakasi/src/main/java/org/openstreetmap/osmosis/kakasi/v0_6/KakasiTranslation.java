@@ -9,9 +9,11 @@ public class KakasiTranslation {
         this.to = to;
     }
 
+
     public KakasiCharsetCategory getFrom() {
         return from;
     }
+
 
     public KakasiCharsetCategory getTo() {
         return to;

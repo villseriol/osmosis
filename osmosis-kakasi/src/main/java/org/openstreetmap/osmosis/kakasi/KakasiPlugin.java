@@ -7,6 +7,7 @@ import org.openstreetmap.osmosis.core.pipeline.common.TaskManagerFactory;
 import org.openstreetmap.osmosis.core.plugin.PluginLoader;
 import org.openstreetmap.osmosis.kakasi.v0_6.KakasiTaskFactory;
 
+
 public class KakasiPlugin implements PluginLoader {
     @Override
     public Map<String, TaskManagerFactory> loadTaskFactories() {
