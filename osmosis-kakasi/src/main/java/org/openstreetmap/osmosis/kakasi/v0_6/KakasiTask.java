@@ -15,7 +15,12 @@ import org.openstreetmap.osmosis.core.domain.v0_6.EntityType;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.DuplicateSpaceTransformer;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Latin1Transformer;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Transformer;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TransformerUtil;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TrimTransformer;
+import org.openstreetmap.osmosis.kakasi.v0_6.transformers.UnaccentTransformer;
 
 
 public class KakasiTask implements SinkSource {
@@ -24,6 +29,7 @@ public class KakasiTask implements SinkSource {
     private String dictPath;
     private String tagRegex;
     private KakasiConfig config = KakasiConfig.createDefaultConfig();
+    private TransformerUtil transformerUtil = TransformerUtil.getInstance();
 
     public KakasiTask(final String dictPath, final String tagRegex) {
         this.dictPath = dictPath;
@@ -43,11 +49,14 @@ public class KakasiTask implements SinkSource {
 
         logger.log(Level.FINER, String.format("Starting translation for %s", entity.getId()));
 
+        Transformer inputT = transformerUtil.getComposedInputTransformer();
+        Transformer outputT = transformerUtil.getComposedOutputTransformer();
+
         for (Tag tag : entityTags) {
             String key = tag.getKey();
             if (key.matches(tagRegex)) {
                 String original = tag.getValue();
-                String value = TransformerUtil.post(Kakasi.run(TransformerUtil.pre(original)));
+                String value = outputT.transform(Kakasi.run(inputT.transform(original)));
                 Tag next = new Tag(key, value);
 
                 logger.log(Level.FINER, String.format("%s: (%s, %s)", key, original, value));
@@ -88,6 +97,12 @@ public class KakasiTask implements SinkSource {
 
             config.setDictionaries(dictionaries);
         }
+
+        transformerUtil.registerInputTransformer(UnaccentTransformer.getInstance());
+        transformerUtil.registerInputTransformer(Latin1Transformer.getInstance());
+
+        transformerUtil.registerOutputTransformer(TrimTransformer.getInstance());
+        transformerUtil.registerOutputTransformer(DuplicateSpaceTransformer.getInstance());
 
         Kakasi.configure(config);
     }

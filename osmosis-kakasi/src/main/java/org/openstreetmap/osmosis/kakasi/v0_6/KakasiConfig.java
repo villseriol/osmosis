@@ -14,6 +14,8 @@ public class KakasiConfig {
     private Collection<KakasiTranslation> translations = new ArrayList<>();
     private Collection<String> dictionaries = new ArrayList<>();
     private boolean isSeparatorEnabled;
+    private boolean isCapitalize;
+    private boolean isUpperCase;
     private String separator;
 
     public static KakasiConfig createDefaultConfig() {
@@ -31,6 +33,26 @@ public class KakasiConfig {
                 });
             }
         };
+    }
+
+
+    public void setUpperCase(boolean isUpperCase) {
+        this.isUpperCase = isUpperCase;
+    }
+
+
+    public boolean isUpperCase() {
+        return isUpperCase;
+    }
+
+
+    public void setCapitalize(boolean isCapitalize) {
+        this.isCapitalize = isCapitalize;
+    }
+
+
+    public boolean isCapitalize() {
+        return isCapitalize;
     }
 
 
@@ -85,6 +107,14 @@ public class KakasiConfig {
             if (separator != null && !"".equals(separator)) {
                 arguments.add(String.format("-S\"%s\"", separator));
             }
+        }
+
+        if (isUpperCase) {
+            arguments.add("U");
+        }
+
+        if (isCapitalize) {
+            arguments.add("-C");
         }
 
         for (KakasiTranslation t : translations) {
