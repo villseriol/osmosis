@@ -21,6 +21,9 @@
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
     <module name="FileLength"/>
 
+    <module name="SuppressionFilter">
+        <property name="file" value="${suppressionFile}" default="checkstyle-suppressions.xml" />
+    </module>
 
     <!-- Enabled to ensure that the correct copyright header is inserted. -->
     <module name="Header">
@@ -115,7 +118,7 @@
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField">
-        	<!-- Allow hidden fields for constructors and setters. -->
+            <!-- Allow hidden fields for constructors and setters. -->
             <property name="ignoreConstructorParameter" value="true"/>
             <property name="ignoreSetter" value="true"/>
         </module>
@@ -147,7 +150,7 @@
         <module name="FinalParameters"/>-->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
-        
+
         <!-- Complexity Checks. -->
         <!--<module name="BooleanExpressionComplexity"/>-->
         <!--<module name="ClassDataAbstractionCoupling">
