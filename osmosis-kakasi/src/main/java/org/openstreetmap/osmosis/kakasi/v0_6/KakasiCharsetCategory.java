@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 /**
@@ -25,11 +26,11 @@ public enum KakasiCharsetCategory {
      */
     KANJI("J"),
     /**
-     * JIS x0208 characters included in section 4 (Hiragana)
+     * JIS x0208 characters included in section 4 (Hiragana).
      */
     HIRAGANA("H"),
     /**
-     * JIS x0208 characters included in section 5 (Katakana)
+     * JIS x0208 characters included in section 5 (Katakana).
      */
     KATAKANA_JIS("K"),
     /**
@@ -39,7 +40,7 @@ public enum KakasiCharsetCategory {
 
     private final String code;
 
-    private KakasiCharsetCategory(String code) {
+    KakasiCharsetCategory(String code) {
         this.code = code;
     }
 

@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.common;
 
 import java.io.IOException;
@@ -6,12 +7,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-public class NativeLoader {
+
+public final class NativeLoader {
     private static boolean loaded = false;
 
+    private NativeLoader() {
+        super();
+    }
+
+
     public static void load() {
-        if (loaded)
+        if (loaded) {
             return; // load only once
+        }
 
         String libName = "libkakasi_jni.so"; // JNI library compiled for Linux
 

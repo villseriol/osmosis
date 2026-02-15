@@ -1,12 +1,14 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.common.apache3.compat;
 
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
+
 /**
  * A small subset of functionality copied straight from the apache3 commons library.
  */
-public class StringUtils {
+public final class StringUtils {
     /**
      * The empty String {@code ""}.
      * @since 2.0
@@ -17,6 +19,11 @@ public class StringUtils {
     * Pattern used in {@link #stripAccents(String)}.
     */
     private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+"); //$NON-NLS-1$
+
+    private StringUtils() {
+        super();
+    }
+
 
     /**
     * Checks if a CharSequence is empty ("") or null.
@@ -41,72 +48,74 @@ public class StringUtils {
         return cs == null || cs.length() == 0;
     }
 
+
     private static void convertRemainingAccentCharacters(final StringBuilder decomposed) {
         for (int i = 0; i < decomposed.length(); i++) {
             final char charAt = decomposed.charAt(i);
             switch (charAt) {
-                case '\u0141':
-                    decomposed.setCharAt(i, 'L');
-                    break;
-                case '\u0142':
-                    decomposed.setCharAt(i, 'l');
-                    break;
-                // D with stroke
-                case '\u0110':
-                    // LATIN CAPITAL LETTER D WITH STROKE
-                    decomposed.setCharAt(i, 'D');
-                    break;
-                case '\u0111':
-                    // LATIN SMALL LETTER D WITH STROKE
-                    decomposed.setCharAt(i, 'd');
-                    break;
-                // I with bar
-                case '\u0197':
-                    decomposed.setCharAt(i, 'I');
-                    break;
-                case '\u0268':
-                    decomposed.setCharAt(i, 'i');
-                    break;
-                case '\u1D7B':
-                    decomposed.setCharAt(i, 'I');
-                    break;
-                case '\u1DA4':
-                    decomposed.setCharAt(i, 'i');
-                    break;
-                case '\u1DA7':
-                    decomposed.setCharAt(i, 'I');
-                    break;
-                // U with bar
-                case '\u0244':
-                    // LATIN CAPITAL LETTER U BAR
-                    decomposed.setCharAt(i, 'U');
-                    break;
-                case '\u0289':
-                    // LATIN SMALL LETTER U BAR
-                    decomposed.setCharAt(i, 'u');
-                    break;
-                case '\u1D7E':
-                    // LATIN SMALL CAPITAL LETTER U WITH STROKE
-                    decomposed.setCharAt(i, 'U');
-                    break;
-                case '\u1DB6':
-                    // MODIFIER LETTER SMALL U BAR
-                    decomposed.setCharAt(i, 'u');
-                    break;
-                // T with stroke
-                case '\u0166':
-                    // LATIN CAPITAL LETTER T WITH STROKE
-                    decomposed.setCharAt(i, 'T');
-                    break;
-                case '\u0167':
-                    // LATIN SMALL LETTER T WITH STROKE
-                    decomposed.setCharAt(i, 't');
-                    break;
-                default:
-                    break;
+            case '\u0141':
+                decomposed.setCharAt(i, 'L');
+                break;
+            case '\u0142':
+                decomposed.setCharAt(i, 'l');
+                break;
+            // D with stroke
+            case '\u0110':
+                // LATIN CAPITAL LETTER D WITH STROKE
+                decomposed.setCharAt(i, 'D');
+                break;
+            case '\u0111':
+                // LATIN SMALL LETTER D WITH STROKE
+                decomposed.setCharAt(i, 'd');
+                break;
+            // I with bar
+            case '\u0197':
+                decomposed.setCharAt(i, 'I');
+                break;
+            case '\u0268':
+                decomposed.setCharAt(i, 'i');
+                break;
+            case '\u1D7B':
+                decomposed.setCharAt(i, 'I');
+                break;
+            case '\u1DA4':
+                decomposed.setCharAt(i, 'i');
+                break;
+            case '\u1DA7':
+                decomposed.setCharAt(i, 'I');
+                break;
+            // U with bar
+            case '\u0244':
+                // LATIN CAPITAL LETTER U BAR
+                decomposed.setCharAt(i, 'U');
+                break;
+            case '\u0289':
+                // LATIN SMALL LETTER U BAR
+                decomposed.setCharAt(i, 'u');
+                break;
+            case '\u1D7E':
+                // LATIN SMALL CAPITAL LETTER U WITH STROKE
+                decomposed.setCharAt(i, 'U');
+                break;
+            case '\u1DB6':
+                // MODIFIER LETTER SMALL U BAR
+                decomposed.setCharAt(i, 'u');
+                break;
+            // T with stroke
+            case '\u0166':
+                // LATIN CAPITAL LETTER T WITH STROKE
+                decomposed.setCharAt(i, 'T');
+                break;
+            case '\u0167':
+                // LATIN SMALL LETTER T WITH STROKE
+                decomposed.setCharAt(i, 't');
+                break;
+            default:
+                break;
             }
         }
     }
+
 
     /**
     * Removes diacritics (~= accents) from a string. The case will not be altered.

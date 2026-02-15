@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
 import java.text.Normalizer;
@@ -5,7 +6,7 @@ import java.text.Normalizer;
 import org.openstreetmap.osmosis.kakasi.common.apache3.compat.StringUtils;
 
 
-public class UnaccentTransformer implements Transformer {
+public final class UnaccentTransformer implements Transformer {
     private static UnaccentTransformer instance;
 
     private UnaccentTransformer() {

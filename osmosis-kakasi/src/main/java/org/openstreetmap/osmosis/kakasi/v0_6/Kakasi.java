@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 import java.nio.charset.Charset;
@@ -9,16 +10,21 @@ import org.openstreetmap.osmosis.kakasi.common.NativeLoader;
 import org.openstreetmap.osmosis.kakasi.common.jni.kakasi;
 
 
-public class Kakasi {
+public final class Kakasi {
     private static final Logger LOGGER = Logger.getLogger(Kakasi.class.getName());
-    private static Charset EUC_JP = Charset.forName("EUC-JP");
+    private static final Charset EUC_JP = Charset.forName("EUC-JP");
 
     static {
         NativeLoader.load();
     }
 
+    private Kakasi() {
+        super();
+    }
+
+
     /**
-     * Configure that kakasi shared library globally using the specified config
+     * Configure that kakasi shared library globally using the specified config.
      *
      * @param config the config
      */

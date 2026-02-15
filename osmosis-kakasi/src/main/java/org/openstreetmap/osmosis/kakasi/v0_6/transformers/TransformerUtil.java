@@ -1,10 +1,11 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TransformerUtil {
+public final class TransformerUtil {
     private static TransformerUtil instance;
 
     private List<Transformer> inputTransformers = new ArrayList<>();

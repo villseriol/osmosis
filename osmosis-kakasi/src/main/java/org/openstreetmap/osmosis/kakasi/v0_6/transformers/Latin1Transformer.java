@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
 
 import java.util.Collections;
@@ -5,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Latin1Transformer implements Transformer {
-    public static final Map<Character, String> FULLWIDTH_TO_ASCII;
-    public static Latin1Transformer instance;
+public final class Latin1Transformer implements Transformer {
+    private static Transformer instance;
+    private static final Map<Character, String> FULLWIDTH_TO_ASCII;
 
     private Latin1Transformer() {
         super();

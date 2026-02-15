@@ -1,3 +1,4 @@
+// This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
 import static org.junit.Assert.assertEquals;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.openstreetmap.osmosis.testutil.AbstractDataTest;
+
 
 public class KakasiTest extends AbstractDataTest {
     private static final Charset EUC_JP = Charset.forName("EUC-JP");
@@ -33,10 +35,12 @@ public class KakasiTest extends AbstractDataTest {
         Kakasi.configure(config);
     }
 
+
     @Before
     public void tareDown() {
         // Do nothing
     }
+
 
     @Test
     public void testSimpleAscii() {
@@ -44,10 +48,12 @@ public class KakasiTest extends AbstractDataTest {
         assertEquals("test", Kakasi.run("test"));
     }
 
+
     @Test
     public void testZenkaku() {
         assertEquals("Fullwidth", Kakasi.run("Ｆｕｌｌｗｉｄｔｈ"));
     }
+
 
     @Test
     public void testKatakana() {
@@ -61,7 +67,9 @@ public class KakasiTest extends AbstractDataTest {
         assertNotEquals("nihon", Kakasi.run("日本"));
 
         // Only works when using .geo dictionary, but causes other entries to fail
-        // For OSM projects, exclude the .geo dictionary. If the entry is of geographic importance, it most likely has an english/romaji entry anyway
+
+        // For OSM projects, exclude the .geo dictionary
+        // If the entry is of geographic importance, it most likely has an english/romaji entry anyway
         assertNotEquals("shirahanechou", Kakasi.run("白羽根町"));
 
         assertEquals("a^kanso^ shuu", Kakasi.run("アーカンソー州"));
