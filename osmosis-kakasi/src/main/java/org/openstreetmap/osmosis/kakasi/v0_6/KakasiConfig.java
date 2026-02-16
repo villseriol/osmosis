@@ -14,9 +14,9 @@ public class KakasiConfig {
 
     private Collection<KakasiTranslation> translations = new ArrayList<>();
     private Collection<String> dictionaries = new ArrayList<>();
-    private boolean isSeparatorEnabled;
-    private boolean isCapitalize;
-    private boolean isUpperCase;
+    private boolean separatorEnabled;
+    private boolean capitalize;
+    private boolean upperCase;
     private String separator;
 
     public static KakasiConfig createDefaultConfig() {
@@ -37,23 +37,23 @@ public class KakasiConfig {
     }
 
 
-    public void setUpperCase(boolean isUpperCase) {
-        this.isUpperCase = isUpperCase;
+    public void setUpperCase(boolean upperCase) {
+        this.upperCase = upperCase;
     }
 
 
     public boolean isUpperCase() {
-        return isUpperCase;
+        return upperCase;
     }
 
 
-    public void setCapitalize(boolean isCapitalize) {
-        this.isCapitalize = isCapitalize;
+    public void setCapitalize(boolean capitalize) {
+        this.capitalize = capitalize;
     }
 
 
     public boolean isCapitalize() {
-        return isCapitalize;
+        return capitalize;
     }
 
 
@@ -68,12 +68,12 @@ public class KakasiConfig {
 
 
     public boolean isSeparatorEnabled() {
-        return isSeparatorEnabled;
+        return separatorEnabled;
     }
 
 
-    public void setSeparatorEnabled(boolean isSeparatorEnabled) {
-        this.isSeparatorEnabled = isSeparatorEnabled;
+    public void setSeparatorEnabled(boolean separatorEnabled) {
+        this.separatorEnabled = separatorEnabled;
     }
 
 
@@ -102,7 +102,7 @@ public class KakasiConfig {
         arguments.add(String.format("-i%s", INPUT_ENCODING.getCode()));
         arguments.add(String.format("-o%s", OUTPUT_ENCODING.getCode()));
 
-        if (isSeparatorEnabled) {
+        if (separatorEnabled) {
             arguments.add("-s");
 
             if (separator != null && !"".equals(separator)) {
@@ -110,11 +110,11 @@ public class KakasiConfig {
             }
         }
 
-        if (isUpperCase) {
+        if (upperCase) {
             arguments.add("U");
         }
 
-        if (isCapitalize) {
+        if (capitalize) {
             arguments.add("-C");
         }
 
