@@ -15,8 +15,13 @@ public class KakasiPluginTest extends AbstractDataTest {
         File sourceFile = dataUtils.createDataFile("385218500.xml");
         File outputFile = dataUtils.newFile();
 
-        Osmosis.run(new String[] { "-q", "--read-xml", sourceFile.getPath(), "--kakasi",
-                "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
-                "--write-xml", outputFile.getPath() });
+        // @formatter:off
+        Osmosis.run(new String[] {
+            "-q",
+            "--read-xml",
+            sourceFile.getPath(),
+            "--kakasi", "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
+            "--write-xml", outputFile.getPath() });
+        // @formatter:on
     }
 }
