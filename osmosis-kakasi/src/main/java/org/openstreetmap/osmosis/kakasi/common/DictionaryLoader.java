@@ -3,8 +3,6 @@ package org.openstreetmap.osmosis.kakasi.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -46,7 +44,7 @@ public final class DictionaryLoader {
             throw new IllegalArgumentException("Key cannot be null");
         }
 
-        String normalizedKey = key.toLowerCase(); // case-insensitive
+        String normalizedKey = key.toLowerCase();
 
         return CACHE.computeIfAbsent(normalizedKey, k -> {
             String resourcePath = RESOURCE_MAP.get(k);
@@ -54,30 +52,20 @@ public final class DictionaryLoader {
                 throw new IllegalArgumentException("Unknown dictionary key: " + key);
             }
 
-            try {
-                URL resourceUrl = DictionaryLoader.class.getResource(resourcePath);
-                if (resourceUrl == null) {
-                    throw new IllegalArgumentException("Resource not found: " + resourcePath);
+            try (InputStream in = DictionaryLoader.class.getResourceAsStream(resourcePath)) {
+                if (in == null) {
+                    throw new IOException("Resource not found: " + resourcePath);
                 }
 
-                try {
-                    // Works outside JAR
-                    return Path.of(resourceUrl.toURI());
-                } catch (URISyntaxException | IllegalArgumentException e) {
-                    // Inside JAR: copy to temp file
-                    try (InputStream in = DictionaryLoader.class.getResourceAsStream(resourcePath)) {
-                        if (in == null) {
-                            throw new IllegalArgumentException("Resource not found: " + resourcePath);
-                        }
-                        String fileName = Path.of(resourcePath).getFileName().toString();
-                        Path tempFile = Files.createTempFile("dict-", "-" + fileName);
-                        Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
-                        tempFile.toFile().deleteOnExit();
-                        return tempFile;
-                    }
-                }
-            } catch (IOException ex) {
-                throw new RuntimeException("Failed to load dictionary: " + resourcePath, ex);
+                // Copy to a temporary file
+                String fileName = resourcePath.substring(resourcePath.lastIndexOf('/') + 1);
+                Path tempFile = Files.createTempFile("dict-", "-" + fileName);
+                Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
+                tempFile.toFile().deleteOnExit();
+                return tempFile;
+
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load dictionary: " + resourcePath, e);
             }
         });
     }
