@@ -20,7 +20,9 @@ public class KakasiPluginTest extends AbstractDataTest {
             "-q",
             "--read-xml",
             sourceFile.getPath(),
-            "--kakasi", "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
+            "--kakasi",
+            "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
+            "dictNames=l",
             "--write-xml", outputFile.getPath() });
         // @formatter:on
     }

@@ -10,9 +10,14 @@ import org.openstreetmap.osmosis.core.pipeline.v0_6.SinkSourceManager;
 public class KakasiTaskFactory extends TaskManagerFactory {
     @Override
     protected TaskManager createTaskManagerImpl(TaskConfiguration taskConfig) {
-        String dictDir = getStringArgument(taskConfig, "dictPath", null);
+        // a ; separated list of paths that point to a dictionary file
+        String dictPaths = getStringArgument(taskConfig, "dictPaths", null);
+        // a , separated list of dictionary aliases that come pre-packaged with this plugin
+        String dictNames = getStringArgument(taskConfig, "dictNames", null);
+        // a regex string to define what tags kakasi should be run on
         String tagRegex = getStringArgument(taskConfig, "tagRegex");
 
-        return new SinkSourceManager(taskConfig.getId(), new KakasiTask(dictDir, tagRegex), taskConfig.getPipeArgs());
+        return new SinkSourceManager(taskConfig.getId(), new KakasiTask(dictPaths, tagRegex, dictNames),
+                taskConfig.getPipeArgs());
     }
 }

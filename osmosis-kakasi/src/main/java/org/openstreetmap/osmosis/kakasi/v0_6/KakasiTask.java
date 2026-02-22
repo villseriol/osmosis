@@ -10,12 +10,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
 import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
 import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
 import org.openstreetmap.osmosis.core.domain.v0_6.EntityType;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
+import org.openstreetmap.osmosis.kakasi.common.DictionaryLoader;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.DuplicateSpaceTransformer;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Latin1Transformer;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Transformer;
@@ -27,13 +29,15 @@ import org.openstreetmap.osmosis.kakasi.v0_6.transformers.UnaccentTransformer;
 public class KakasiTask implements SinkSource {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Sink sink;
-    private String dictPath;
+    private String dictPaths;
+    private String dictNames;
     private String tagRegex;
     private KakasiConfig config = KakasiConfig.createDefaultConfig();
     private TransformerUtil transformerUtil = TransformerUtil.getInstance();
 
-    public KakasiTask(final String dictPath, final String tagRegex) {
-        this.dictPath = dictPath;
+    public KakasiTask(final String dictPaths, final String tagRegex, final String dictNames) {
+        this.dictPaths = dictPaths;
+        this.dictNames = dictNames;
         this.tagRegex = tagRegex;
     }
 
@@ -80,24 +84,45 @@ public class KakasiTask implements SinkSource {
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
 
-        if (dictPath != null && !"".equals(dictPath)) {
-            Set<String> dictionaries = new HashSet<>();
+        Set<String> dictionaries = new HashSet<>();
 
-            logger.info("Loading user dictionaries");
+        if (dictNames != null && !"".equals(dictNames)) {
+            logger.info("Loading pre-compiled dictionaries");
 
-            String[] paths = dictPath.split(";");
+            String[] names = dictNames.split(",");
+            for (String name : names) {
+
+                String message = String.format("Loading dictionary: %s", name);
+                logger.info(message);
+
+                try {
+                    Path path = DictionaryLoader.load(name);
+                    dictionaries.add(path.toString());
+                } catch (Exception e) {
+                    String error = String.format("Dictionary could not be loaded: %s", name);
+                    throw new OsmosisRuntimeException(error, e);
+                }
+            }
+        }
+
+        if (dictPaths != null && !"".equals(dictPaths)) {
+            String[] paths = dictPaths.split(";");
             for (String part : paths) {
                 Path path = Path.of(part);
+
+                String message = String.format("Loading: %s", part);
+                logger.info(message);
 
                 if (Files.exists(path)) {
                     dictionaries.add(part);
                 } else {
-                    logger.log(Level.SEVERE, String.format("User dictionary does not exist: %s", path));
+                    String error = String.format("Dictionary does not exist: %s", path);
+                    throw new OsmosisRuntimeException(error);
                 }
             }
-
-            config.setDictionaries(dictionaries);
         }
+
+        config.setDictionaries(dictionaries);
 
         transformerUtil.registerInputTransformer(UnaccentTransformer.getInstance());
         transformerUtil.registerInputTransformer(Latin1Transformer.getInstance());
