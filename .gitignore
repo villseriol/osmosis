@@ -1,8 +1,10 @@
 .gradle
 .idea
+.vscode
 *.javaEe
 *.javae
 *.iml
 *.ipr
 *.iws
 out
+/build

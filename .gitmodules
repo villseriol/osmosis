@@ -1,0 +1,3 @@
+[submodule "osmosis-kakasi/src/main/resources/dict"]
+	path = osmosis-kakasi/src/main/resources/dict
+	url = https://github.com/skk-dev/dict.git

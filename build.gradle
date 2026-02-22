@@ -75,6 +75,7 @@ configure(javaProjects) {
 	checkstyle {
 		configFile = new File(rootDir, 'build-support/checkstyle.xml')
 		configProperties.samedir = configFile.parentFile
+		configProperties.suppressionFile = new File(rootDir, 'build-support/checkstyle-suppressions.xml')
 	}
 
 	// Configure the maven-publish plugin to upload artifacts to the Sonatype repository.

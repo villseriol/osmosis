@@ -1,0 +1,17 @@
+dependencies {
+    implementation project(':osmosis-core')
+    implementation project(':osmosis-xml')
+    testImplementation project(':osmosis-testutil')
+}
+
+sourceSets {
+    main {
+        resources {
+            setSrcDirs(["src/main/resources"])
+            include "dict/SKK-JISYO.*"
+            include "native/linux/*.so"
+            include "native/windows/*.ddl"
+            include "*.conf"
+        }
+    }
+}

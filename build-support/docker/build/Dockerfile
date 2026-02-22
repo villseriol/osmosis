@@ -3,6 +3,8 @@ FROM eclipse-temurin:17.0.13_11-jdk
 RUN apt-get update
 RUN apt-get install -y git
 
+RUN apt-get install -y libkakasi2
+
 ARG CURRENT_USER_ID
 ARG CURRENT_GROUP_ID
 
