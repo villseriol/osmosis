@@ -15,6 +15,8 @@ public class KakasiPluginTest extends AbstractDataTest {
         File sourceFile = dataUtils.createDataFile("385218500.xml");
         File outputFile = dataUtils.newFile();
 
+        File largeDictionaryFile = dataUtils.createDataFile("dictionary/SKK-JISYO.L");
+
         // @formatter:off
         Osmosis.run(new String[] {
             "-q",
@@ -22,7 +24,7 @@ public class KakasiPluginTest extends AbstractDataTest {
             sourceFile.getPath(),
             "--kakasi",
             "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
-            "dictNames=l",
+            "dictPaths=" + largeDictionaryFile.getAbsolutePath(),
             "--write-xml", outputFile.getPath() });
         // @formatter:on
     }
