@@ -12,6 +12,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.openstreetmap.osmosis.testutil.AbstractDataTest;
+import org.villseriol.kakasi.api.Kakasi;
+import org.villseriol.kakasi.api.KakasiConfig;
 
 
 public class KakasiTest extends AbstractDataTest {

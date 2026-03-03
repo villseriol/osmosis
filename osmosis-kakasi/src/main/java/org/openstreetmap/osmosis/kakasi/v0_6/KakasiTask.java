@@ -24,6 +24,8 @@ import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Transformer;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TransformerUtil;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TrimTransformer;
 import org.openstreetmap.osmosis.kakasi.v0_6.transformers.UnaccentTransformer;
+import org.villseriol.kakasi.api.Kakasi;
+import org.villseriol.kakasi.api.KakasiConfig;
 
 
 public class KakasiTask implements SinkSource {
