@@ -3,23 +3,45 @@ package org.openstreetmap.osmosis.kakasi.common;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
-import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Transformer;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.KakasiTransform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.Latin1Transform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.SequenceTransformDecorator;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.SplitTransformDecorator;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.Transform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.TransformProxy;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.TrimTransform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.UnAccentTransform;
 import org.villseriol.kakasi.api.Kakasi;
 import org.villseriol.kakasi.api.KakasiConfig;
 
 
 public final class JpnToEng {
-    private static final Set<Character> KAKASI_IGNORE = Set.of('·', '|', ')', '(', ']', '[', '}', '{');
     private static JpnToEng instance;
+
+    private TransformProxy pre = new TransformProxy();
+    private TransformProxy post = new TransformProxy();
+    private Transform combined = new SequenceTransformDecorator(
+            // 1. split the string into runs of words
+            new SplitTransformDecorator(
+                    // 1. apply the transforms in this order
+                    new SequenceTransformDecorator(
+                            // 1. replace all accented characters with unaccented equivalent
+                            new UnAccentTransform(),
+                            // 2. replace all characters unknown to latin1 codepage
+                            new Latin1Transform(),
+                            // 3. user pre-transform
+                            pre,
+                            // 4. run kakasi on the string
+                            new KakasiTransform())),
+            // 1. trim the white space
+            new TrimTransform(),
+            // 2. user post-transform
+            post);
+
     private KakasiConfig config = KakasiConfig.createDefaultConfig();
-    private List<Transformer> inputTransformers = new ArrayList<>();
-    private List<Transformer> outputTransformers = new ArrayList<>();
 
     private JpnToEng() {
         super();
@@ -35,32 +57,33 @@ public final class JpnToEng {
     }
 
 
-    public void configure() {
+    public void init() {
         Kakasi.configure(config);
     }
 
 
-    public void addOutputTransformer(Transformer transformer) {
-        if (transformer != null) {
-            outputTransformers.add(transformer);
-        }
+    /**
+     * Set a user configurable pre-transform.
+     *
+     * @param transform the pre-transform to apply
+     */
+    public void setPreTransform(Transform transform) {
+        this.pre.setProxy(transform);
     }
 
 
-    public void clearOutputTransformers() {
-        this.outputTransformers.clear();
+    /**
+     * Set a user configurable post-transform.
+     *
+     * @param transform the post-transform to apply
+     */
+    public void setPostTransform(Transform transform) {
+        this.post.setProxy(transform);
     }
 
 
-    public void addInputTransformer(Transformer transformer) {
-        if (transformer != null) {
-            inputTransformers.add(transformer);
-        }
-    }
-
-
-    public void clearInputTransformers() {
-        this.inputTransformers.clear();
+    public void addDictionaryPath(String path) {
+        addDictionaryPath(Path.of(path));
     }
 
 
@@ -89,31 +112,6 @@ public final class JpnToEng {
 
 
     public String run(String input) {
-        Transformer inputT = inputTransformers.stream().reduce(s -> s, (a, b) -> s -> b.transform(a.transform(s)));
-
-        StringBuilder original = new StringBuilder(inputT.transform(input));
-        StringBuilder result = new StringBuilder();
-
-        // refactor this to use regex, need match, before and after. should be simpler
-        StringBuilder buffer = new StringBuilder();
-        while (!original.isEmpty()) {
-            char current = original.charAt(0);
-            if (!KAKASI_IGNORE.contains(current)) {
-                buffer.append(current);
-            } else {
-                // buffer is complete, translate it and move to the next buffer
-                String translated = Kakasi.run(buffer.toString());
-
-                result.append(translated);
-                result.append(current);
-
-                buffer = new StringBuilder();
-            }
-
-            original.deleteCharAt(0);
-        }
-
-        Transformer outputT = outputTransformers.stream().reduce(s -> s, (a, b) -> s -> b.transform(a.transform(s)));
-        return outputT.transform(result.toString());
+        return combined.action(input);
     }
 }

@@ -15,10 +15,6 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
 import org.openstreetmap.osmosis.kakasi.common.JpnToEng;
-import org.openstreetmap.osmosis.kakasi.v0_6.transformers.DuplicateSpaceTransformer;
-import org.openstreetmap.osmosis.kakasi.v0_6.transformers.Latin1Transformer;
-import org.openstreetmap.osmosis.kakasi.v0_6.transformers.TrimTransformer;
-import org.openstreetmap.osmosis.kakasi.v0_6.transformers.UnaccentTransformer;
 
 
 public class KakasiTask implements SinkSource {
@@ -86,6 +82,8 @@ public class KakasiTask implements SinkSource {
 
                 translator.addDictionaryName(name);
             }
+        } else {
+            logger.info("No dictionary names provided");
         }
 
         if (dictPaths != null && !"".equals(dictPaths)) {
@@ -98,15 +96,11 @@ public class KakasiTask implements SinkSource {
 
                 translator.addDictionaryPath(path);
             }
+        } else {
+            logger.info("No dictionary paths provided");
         }
 
-        translator.addInputTransformer(UnaccentTransformer.getInstance());
-        translator.addInputTransformer(Latin1Transformer.getInstance());
-
-        translator.addOutputTransformer(TrimTransformer.getInstance());
-        translator.addOutputTransformer(DuplicateSpaceTransformer.getInstance());
-
-        translator.configure();
+        translator.init();
     }
 
 

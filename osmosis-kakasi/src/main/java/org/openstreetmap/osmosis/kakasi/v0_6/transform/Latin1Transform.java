@@ -1,18 +1,13 @@
 // This software is released into the Public Domain.  See copying.txt for details.
-package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
+package org.openstreetmap.osmosis.kakasi.v0_6.transform;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public final class Latin1Transformer implements Transformer {
-    private static Transformer instance;
+public class Latin1Transform implements Transform {
     private static final Map<Character, String> FULLWIDTH_TO_ASCII;
-
-    private Latin1Transformer() {
-        super();
-    }
 
     static {
         Map<Character, String> map = new HashMap<>();
@@ -148,7 +143,7 @@ public final class Latin1Transformer implements Transformer {
     }
 
     @Override
-    public String transform(String input) {
+    public String action(String input) {
         StringBuilder sb = new StringBuilder(input.length());
 
         for (int i = 0; i < input.length(); i++) {
@@ -158,14 +153,4 @@ public final class Latin1Transformer implements Transformer {
 
         return sb.toString();
     }
-
-
-    public static Transformer getInstance() {
-        if (instance == null) {
-            instance = new Latin1Transformer();
-        }
-
-        return instance;
-    }
-
 }

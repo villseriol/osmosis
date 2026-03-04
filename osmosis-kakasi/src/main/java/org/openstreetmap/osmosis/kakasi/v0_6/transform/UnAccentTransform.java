@@ -1,21 +1,14 @@
 // This software is released into the Public Domain.  See copying.txt for details.
-package org.openstreetmap.osmosis.kakasi.v0_6.transformers;
+package org.openstreetmap.osmosis.kakasi.v0_6.transform;
 
 import java.text.Normalizer;
 
 import org.openstreetmap.osmosis.kakasi.common.apache3.compat.StringUtils;
 
 
-public final class UnaccentTransformer implements Transformer {
-    private static UnaccentTransformer instance;
-
-    private UnaccentTransformer() {
-        super();
-    }
-
-
+public class UnAccentTransform implements Transform {
     @Override
-    public String transform(final String input) {
+    public String action(String input) {
         // default implementation decomposes accented characters into (base character + accent)
         final String compatibility = StringUtils.stripAccents(input);
 
@@ -23,14 +16,5 @@ public final class UnaccentTransformer implements Transformer {
         final StringBuilder composed = new StringBuilder(Normalizer.normalize(compatibility, Normalizer.Form.NFC));
 
         return composed.toString();
-    }
-
-
-    public static Transformer getInstance() {
-        if (instance == null) {
-            instance = new UnaccentTransformer();
-        }
-
-        return instance;
     }
 }
