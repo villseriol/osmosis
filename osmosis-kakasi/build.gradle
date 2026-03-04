@@ -10,8 +10,6 @@ sourceSets {
         resources {
             setSrcDirs(["src/main/resources"])
             include "dict/SKK-JISYO.*"
-            include "native/linux/*.so"
-            include "native/windows/*.ddl"
             include "*.conf"
         }
     }
