@@ -6,7 +6,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openstreetmap.osmosis.kakasi.common.KakasiPipeline;
 import org.openstreetmap.osmosis.testutil.AbstractDataTest;
 
 
