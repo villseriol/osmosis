@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- List of dictionaries to use -->
-    <dictionary-list>
-        <dictionary alias="L" />
-    </dictionary-list>
     <!-- List of tags to transform -->
     <tag-list>
         <tag key="operator" />
