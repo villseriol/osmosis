@@ -11,12 +11,11 @@ public class HalfToFullTransform implements Transform {
     // Regex to match runs of half-width Katakana (U+FF61–U+FF9F)
     private static final Pattern HALF_WIDTH_KATAKANA_PATTERN = Pattern
             .compile("[\\uFF61-\\uFF9D][\\uFF9E\\uFF9F]?|[\\uFF9E\\uFF9F]");
+    private static final Transliterator HALF_FULL = Transliterator.getInstance("Halfwidth-Fullwidth");
+    private static final Transliterator NFC = Transliterator.getInstance("NFC");
 
     @Override
     public String action(String input) {
-        Transliterator t1 = Transliterator.getInstance("Halfwidth-Fullwidth");
-        Transliterator t2 = Transliterator.getInstance("NFC");
-
         Matcher m = HALF_WIDTH_KATAKANA_PATTERN.matcher(input);
         StringBuffer sb = new StringBuffer();
 
@@ -27,7 +26,7 @@ public class HalfToFullTransform implements Transform {
                 // remove standalone marks
                 m.appendReplacement(sb, "");
             } else {
-                String fullWidth = t2.transliterate(t1.transliterate(group));
+                String fullWidth = NFC.transliterate(HALF_FULL.transliterate(group));
                 m.appendReplacement(sb, fullWidth);
             }
         }

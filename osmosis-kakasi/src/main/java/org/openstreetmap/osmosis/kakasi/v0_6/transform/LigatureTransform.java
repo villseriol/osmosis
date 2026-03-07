@@ -5,10 +5,11 @@ import com.ibm.icu.text.Transliterator;
 
 
 public class LigatureTransform implements Transform {
+    private static final Transliterator LIGATURE_ASCII = Transliterator
+            .getInstance("[[:Latin:]]; Any-Latin; Latin-ASCII");
+
     @Override
     public String action(String input) {
-        Transliterator t = Transliterator.getInstance("[[:Latin:]]; Any-Latin; Latin-ASCII");
-
-        return t.transliterate(input);
+        return LIGATURE_ASCII.transliterate(input);
     }
 }

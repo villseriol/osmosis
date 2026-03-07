@@ -5,10 +5,11 @@ import com.ibm.icu.text.Transliterator;
 
 
 public class UnAccentTransform implements Transform {
+    private static final Transliterator STRIP_ACCENT = Transliterator
+            .getInstance("[[:Latin:]]; NFD; [:Nonspacing Mark:] Remove; NFC");
+
     @Override
     public String action(String input) {
-        Transliterator t = Transliterator.getInstance("[[:Latin:]]; NFD; [:Nonspacing Mark:] Remove; NFC");
-
-        return t.transliterate(input);
+        return STRIP_ACCENT.transliterate(input);
     }
 }

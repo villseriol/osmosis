@@ -23,8 +23,8 @@ import org.villseriol.kakasi.api.KakasiConfig;
 
 public final class KakasiPipeline {
     private static KakasiPipeline instance;
+    private static final Logger LOG = Logger.getLogger(KakasiPipeline.class.getName());
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
     private TransformProxy pre = new TransformProxy();
     private TransformProxy post = new TransformProxy();
     private Transform combined = new SequenceTransformDecorator(
@@ -87,7 +87,7 @@ public final class KakasiPipeline {
     public void init(UserConfiguration configuration) {
         List<String> dictionaries = configuration.getDictionaries().stream().map((p) -> p.toString()).toList();
         if (!dictionaries.isEmpty()) {
-            logger.info("Loaded " + dictionaries.size() + " dictionaries.");
+            LOG.info("Loaded " + dictionaries.size() + " dictionaries.");
             this.config.setDictionaries(dictionaries);
         }
 
