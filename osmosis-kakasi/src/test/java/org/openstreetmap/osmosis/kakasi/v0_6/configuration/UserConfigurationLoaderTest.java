@@ -21,7 +21,7 @@ public class UserConfigurationLoaderTest extends AbstractDataTest {
 
     @Test
     public void testEmptyConfiguration() {
-        File sourceFile = dataUtils.createDataFile("empty-user-config.xml");
+        File sourceFile = dataUtils.createDataFile("v0_6/empty-user-config.xml");
         UserConfiguration config = loader.load(sourceFile);
         assertNotNull(config);
         List<Path> dictionaries = config.getDictionaries();
@@ -40,7 +40,7 @@ public class UserConfigurationLoaderTest extends AbstractDataTest {
 
     @Test
     public void testMalformedConfiguration() {
-        File sourceFile = dataUtils.createDataFile("malformed-user-config.xml");
+        File sourceFile = dataUtils.createDataFile("v0_6/malformed-user-config.xml");
         assertThrows(OsmosisRuntimeException.class, () -> {
             loader.load(sourceFile);
         });
@@ -49,7 +49,7 @@ public class UserConfigurationLoaderTest extends AbstractDataTest {
 
     @Test
     public void testReplacementsConfiguration() {
-        File sourceFile = dataUtils.createDataFile("replacements-user-config.xml");
+        File sourceFile = dataUtils.createDataFile("v0_6/replacements-user-config.xml");
         UserConfiguration config = loader.load(sourceFile);
         assertNotNull(config);
         List<Replacement> replacements = config.getReplacements();
