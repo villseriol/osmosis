@@ -21,14 +21,15 @@ import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfigurationLoad
 public class KakasiTask implements SinkSource {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private JpnToEng translator = JpnToEng.getInstance();
+    private UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
 
     private Sink sink;
-    private UserConfiguration configuration;
+    private String configFile;
+    private UserConfiguration configuration = new UserConfiguration();
 
     public KakasiTask(final String configFile) {
         logger.log(Level.FINE, "Kakasi configured with " + configFile);
-        UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
-        this.configuration = loader.load(configFile);
+        this.configFile = configFile;
     }
 
 
@@ -71,6 +72,8 @@ public class KakasiTask implements SinkSource {
     @Override
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
+
+        this.configuration = loader.load(configFile);
 
         translator.init(configuration);
     }
