@@ -1,5 +1,5 @@
 // This software is released into the Public Domain.  See copying.txt for details.
-package org.openstreetmap.osmosis.kakasi.common;
+package org.openstreetmap.osmosis.kakasi.v0_6.configuration;
 
 import java.io.IOException;
 import java.io.InputStream;
