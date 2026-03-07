@@ -23,7 +23,7 @@ public class KakasiPluginTest extends AbstractDataTest {
             "--read-xml",
             sourceFile.getPath(),
             "--kakasi",
-            "configFile=" + configFile.getPath(),
+            "configFile=" + configFile,
             "--write-xml", outputFile.getPath() });
         // @formatter:on
     }

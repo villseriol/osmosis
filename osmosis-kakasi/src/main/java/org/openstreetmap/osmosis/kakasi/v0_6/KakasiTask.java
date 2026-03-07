@@ -26,6 +26,7 @@ public class KakasiTask implements SinkSource {
     private UserConfiguration configuration;
 
     public KakasiTask(final String configFile) {
+        logger.log(Level.FINE, "Kakasi configured with " + configFile);
         UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
         this.configuration = loader.load(configFile);
     }
