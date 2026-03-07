@@ -18,15 +18,15 @@ import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfigurationLoad
 
 
 public class KakasiTask implements SinkSource {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
-    private KakasiPipeline pipeline = KakasiPipeline.getInstance();
-    private UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
+    private static final Logger LOG = Logger.getLogger(KakasiTask.class.getName());
+    private final KakasiPipeline pipeline = KakasiPipeline.getInstance();
+    private final UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
 
     private Sink sink;
     private UserConfiguration configuration = new UserConfiguration();
 
     public KakasiTask(final String configFile) {
-        logger.log(Level.FINE, "Kakasi configured with " + configFile);
+        LOG.log(Level.FINE, "Kakasi configured with " + configFile);
         this.configuration = loader.load(configFile);
     }
 
@@ -41,7 +41,7 @@ public class KakasiTask implements SinkSource {
         Collection<Tag> removed = new HashSet<>();
         Collection<Tag> updated = new HashSet<>();
 
-        logger.log(Level.FINER, String.format("Starting translation for %s", entity.getId()));
+        LOG.log(Level.FINER, String.format("Starting translation for %s", entity.getId()));
 
         for (Tag tag : entityTags) {
             String key = tag.getKey();
@@ -51,14 +51,14 @@ public class KakasiTask implements SinkSource {
                 String value = pipeline.run(original);
                 Tag next = new Tag(key, value);
 
-                logger.log(Level.FINER, String.format("%s: (%s, %s)", key, original, value));
+                LOG.log(Level.FINER, String.format("%s: (%s, %s)", key, original, value));
 
                 removed.add(tag);
                 updated.add(next);
             }
         }
 
-        logger.log(Level.FINER, "Completed translation");
+        LOG.log(Level.FINER, "Completed translation");
 
         entityTags.removeAll(removed);
         entityTags.addAll(updated);

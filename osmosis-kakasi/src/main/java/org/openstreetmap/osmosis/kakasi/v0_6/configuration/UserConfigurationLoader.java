@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,7 +20,6 @@ import org.w3c.dom.NodeList;
 
 public final class UserConfigurationLoader {
     private static UserConfigurationLoader instance;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     private UserConfigurationLoader() {
         super();
@@ -213,8 +211,6 @@ public final class UserConfigurationLoader {
             if (nodeName.equals("when-value-is")) {
                 Replacement r = parseWhenValueIs(element, child);
                 result.add(r);
-            } else {
-                logger.warning("log a useful warning here");
             }
         }
 
