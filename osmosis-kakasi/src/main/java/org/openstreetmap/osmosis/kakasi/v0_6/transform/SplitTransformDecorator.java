@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 
 public class SplitTransformDecorator extends TransformDecorator {
+    // Regex to match known word splitters in the Latin1 codepage (includes space)
     private static final Pattern SPLIT_PATTERN = Pattern.compile("[·\\|\\)\\(\\]\\[\\}\\{ <>]+");
 
     public SplitTransformDecorator(Transform target) {

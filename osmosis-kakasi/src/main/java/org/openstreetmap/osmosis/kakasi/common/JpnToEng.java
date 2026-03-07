@@ -1,13 +1,16 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.common;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import org.openstreetmap.osmosis.core.OsmosisRuntimeException;
+import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfiguration;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.HalfToFullTransform;
 import org.openstreetmap.osmosis.kakasi.v0_6.transform.KakasiTransform;
-import org.openstreetmap.osmosis.kakasi.v0_6.transform.Latin1Transform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.LigatureTransform;
+import org.openstreetmap.osmosis.kakasi.v0_6.transform.ReplacementTransform;
 import org.openstreetmap.osmosis.kakasi.v0_6.transform.SequenceTransformDecorator;
 import org.openstreetmap.osmosis.kakasi.v0_6.transform.SplitTransformDecorator;
 import org.openstreetmap.osmosis.kakasi.v0_6.transform.Transform;
@@ -19,6 +22,8 @@ import org.villseriol.kakasi.api.KakasiConfig;
 
 
 public final class JpnToEng {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     private static JpnToEng instance;
 
     private TransformProxy pre = new TransformProxy();
@@ -28,13 +33,11 @@ public final class JpnToEng {
             new SplitTransformDecorator(
                     // 1. apply the transforms in this order
                     new SequenceTransformDecorator(
-                            // 1. replace all accented characters with unaccented equivalent
-                            new UnAccentTransform(),
-                            // 2. replace all characters unknown to latin1 codepage
-                            new Latin1Transform(),
-                            // 3. user pre-transform
+                            // 1. replace all characters except japanese ones to the latin1 codepage
+                            new UnAccentTransform(), new LigatureTransform(), new HalfToFullTransform(),
+                            // 2. user pre-transform
                             pre,
-                            // 4. run kakasi on the string
+                            // 3. run kakasi on the string
                             new KakasiTransform())),
             // 1. trim the white space
             new TrimTransform(),
@@ -54,11 +57,6 @@ public final class JpnToEng {
         }
 
         return instance;
-    }
-
-
-    public void init() {
-        Kakasi.configure(config);
     }
 
 
@@ -82,32 +80,24 @@ public final class JpnToEng {
     }
 
 
-    public void addDictionaryPath(String path) {
-        addDictionaryPath(Path.of(path));
+    public void init() {
+        Kakasi.configure(config);
     }
 
 
-    public void addDictionaryPath(Path path) {
-        Collection<String> existing = config.getDictionaries();
-
-        if (Files.exists(path)) {
-            existing.add(path.toString());
-        } else {
-            String error = String.format("Dictionary does not exist: %s", path);
-            throw new OsmosisRuntimeException(error);
+    public void init(UserConfiguration configuration) {
+        List<String> dictionaries = configuration.getDictionaries().stream().map((p) -> p.toString()).toList();
+        if (!dictionaries.isEmpty()) {
+            logger.info("Loaded " + dictionaries.size() + " dictionaries.");
+            this.config.setDictionaries(dictionaries);
         }
-    }
 
+        Kakasi.configure(config);
 
-    public void addDictionaryName(String name) {
-        Collection<String> existing = config.getDictionaries();
-        try {
-            Path path = DictionaryLoader.load(name);
-            existing.add(path.toString());
-        } catch (Exception e) {
-            String error = String.format("Dictionary could not be loaded: %s", name);
-            throw new OsmosisRuntimeException(error, e);
-        }
+        Map<CharSequence, CharSequence> replacements = configuration.getReplacements().stream()
+                .collect(Collectors.toMap((r) -> r.getFrom(), (r) -> r.getTo()));
+        this.pre.setProxy(new ReplacementTransform(replacements));
+
     }
 
 

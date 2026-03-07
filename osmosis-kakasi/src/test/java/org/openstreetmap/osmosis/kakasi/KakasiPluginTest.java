@@ -3,6 +3,7 @@ package org.openstreetmap.osmosis.kakasi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.openstreetmap.osmosis.core.Osmosis;
@@ -10,12 +11,14 @@ import org.openstreetmap.osmosis.testutil.AbstractDataTest;
 
 
 public class KakasiPluginTest extends AbstractDataTest {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Test
     public void testHospitalNode() throws IOException {
         File sourceFile = dataUtils.createDataFile("385218500.xml");
         File outputFile = dataUtils.newFile();
 
-        File largeDictionaryFile = dataUtils.createDataFile("dictionary/SKK-JISYO.L");
+        File configFile = dataUtils.createDataFile("standard-user-config.xml");
 
         // @formatter:off
         Osmosis.run(new String[] {
@@ -23,8 +26,7 @@ public class KakasiPluginTest extends AbstractDataTest {
             "--read-xml",
             sourceFile.getPath(),
             "--kakasi",
-            "tagRegex=(operator|ref|tunnel:name|bridge:name|name|name:en|name:ja|alt_name|brand|brand:ja)",
-            "dictPaths=" + largeDictionaryFile.getAbsolutePath(),
+            "configFile=" + configFile.getAbsolutePath(),
             "--write-xml", outputFile.getPath() });
         // @formatter:on
     }

@@ -3,30 +3,18 @@ package org.openstreetmap.osmosis.kakasi.v0_6;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.nio.charset.Charset;
-
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openstreetmap.osmosis.kakasi.common.JpnToEng;
 import org.openstreetmap.osmosis.testutil.AbstractDataTest;
 
 
 public class KakasiTest extends AbstractDataTest {
-    private static final Charset EUC_JP = Charset.forName("EUC-JP");
     private static final JpnToEng TRANSLATOR = JpnToEng.getInstance();
 
-    @Before
-    public void setUp() {
-        File largeDictionary = dataUtils.createDataFile("dictionary/SKK-JISYO.L", EUC_JP);
-        String largeDictionaryPath = largeDictionary.getAbsolutePath();
-
-        File stationDictionary = dataUtils.createDataFile("dictionary/SKK-JISYO.station", EUC_JP);
-        String stationDictionaryPath = stationDictionary.getAbsolutePath();
-
-        TRANSLATOR.addDictionaryPath(largeDictionaryPath);
-        TRANSLATOR.addDictionaryPath(stationDictionaryPath);
-
+    @BeforeClass
+    public static void onlyOnce() {
         TRANSLATOR.init();
     }
 

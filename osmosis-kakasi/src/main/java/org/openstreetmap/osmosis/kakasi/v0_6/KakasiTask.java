@@ -1,7 +1,6 @@
 // This software is released into the Public Domain.  See copying.txt for details.
 package org.openstreetmap.osmosis.kakasi.v0_6;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,6 +14,8 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
 import org.openstreetmap.osmosis.kakasi.common.JpnToEng;
+import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfiguration;
+import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfigurationLoader;
 
 
 public class KakasiTask implements SinkSource {
@@ -22,14 +23,11 @@ public class KakasiTask implements SinkSource {
     private JpnToEng translator = JpnToEng.getInstance();
 
     private Sink sink;
-    private String dictPaths;
-    private String dictNames;
-    private String tagRegex;
+    private UserConfiguration configuration;
 
-    public KakasiTask(final String dictPaths, final String tagRegex, final String dictNames) {
-        this.dictPaths = dictPaths;
-        this.dictNames = dictNames;
-        this.tagRegex = tagRegex;
+    public KakasiTask(final String configFile) {
+        UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
+        this.configuration = loader.load(configFile);
     }
 
 
@@ -47,7 +45,8 @@ public class KakasiTask implements SinkSource {
 
         for (Tag tag : entityTags) {
             String key = tag.getKey();
-            if (key.matches(tagRegex)) {
+            boolean isMatch = configuration.getTagMatchs().stream().anyMatch((t) -> t.isMatch(key));
+            if (isMatch) {
                 String original = tag.getValue();
                 String value = translator.run(original);
                 Tag next = new Tag(key, value);
@@ -72,35 +71,7 @@ public class KakasiTask implements SinkSource {
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
 
-        if (dictNames != null && !"".equals(dictNames)) {
-            logger.info("Loading pre-compiled dictionaries");
-
-            String[] names = dictNames.split(",");
-            for (String name : names) {
-                String message = String.format("Loading dictionary: %s", name);
-                logger.info(message);
-
-                translator.addDictionaryName(name);
-            }
-        } else {
-            logger.info("No dictionary names provided");
-        }
-
-        if (dictPaths != null && !"".equals(dictPaths)) {
-            String[] paths = dictPaths.split(";");
-            for (String part : paths) {
-                Path path = Path.of(part);
-
-                String message = String.format("Loading: %s", part);
-                logger.info(message);
-
-                translator.addDictionaryPath(path);
-            }
-        } else {
-            logger.info("No dictionary paths provided");
-        }
-
-        translator.init();
+        translator.init(configuration);
     }
 
 

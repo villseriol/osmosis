@@ -2,6 +2,8 @@ dependencies {
     implementation project(':osmosis-core')
     implementation project(':osmosis-xml')
     implementation group: 'io.github.villseriol', name: 'kakasi2', version: dependencyVersionKakasi
+    implementation group: 'org.apache.commons', name: 'commons-text', version: dependencyVersionCommonsText
+    implementation group: 'com.ibm.icu', name: 'icu4j', version: dependencyVersionIcu4j
     testImplementation project(':osmosis-testutil')
 }
 
