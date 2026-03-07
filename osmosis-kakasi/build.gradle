@@ -15,4 +15,10 @@ sourceSets {
             include "*.conf"
         }
     }
+    test {
+        resources {
+            setSrcDirs(["src/test/resources"])
+            include "*.xml"
+        }
+    }
 }

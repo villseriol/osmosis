@@ -8,4 +8,6 @@
 pkill -f '.*GradleDaemon.*'
 # switching java versions
 sudo update-alternatives --config java
+
+./gradlew -PosmosisBuildType=RELEASE distZip
 ```
