@@ -6,12 +6,12 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openstreetmap.osmosis.kakasi.common.JpnToEng;
+import org.openstreetmap.osmosis.kakasi.common.KakasiPipeline;
 import org.openstreetmap.osmosis.testutil.AbstractDataTest;
 
 
 public class KakasiTest extends AbstractDataTest {
-    private static final JpnToEng TRANSLATOR = JpnToEng.getInstance();
+    private static final KakasiPipeline TRANSLATOR = KakasiPipeline.getInstance();
 
     @BeforeClass
     public static void onlyOnce() {

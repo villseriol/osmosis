@@ -13,23 +13,21 @@ import org.openstreetmap.osmosis.core.domain.v0_6.EntityType;
 import org.openstreetmap.osmosis.core.domain.v0_6.Tag;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 import org.openstreetmap.osmosis.core.task.v0_6.SinkSource;
-import org.openstreetmap.osmosis.kakasi.common.JpnToEng;
 import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfiguration;
 import org.openstreetmap.osmosis.kakasi.v0_6.configuration.UserConfigurationLoader;
 
 
 public class KakasiTask implements SinkSource {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private JpnToEng translator = JpnToEng.getInstance();
+    private KakasiPipeline pipeline = KakasiPipeline.getInstance();
     private UserConfigurationLoader loader = UserConfigurationLoader.getInstance();
 
     private Sink sink;
-    private String configFile;
     private UserConfiguration configuration = new UserConfiguration();
 
     public KakasiTask(final String configFile) {
         logger.log(Level.FINE, "Kakasi configured with " + configFile);
-        this.configFile = configFile;
+        this.configuration = loader.load(configFile);
     }
 
 
@@ -50,7 +48,7 @@ public class KakasiTask implements SinkSource {
             boolean isMatch = configuration.getTagMatchs().stream().anyMatch((t) -> t.isMatch(key));
             if (isMatch) {
                 String original = tag.getValue();
-                String value = translator.run(original);
+                String value = pipeline.run(original);
                 Tag next = new Tag(key, value);
 
                 logger.log(Level.FINER, String.format("%s: (%s, %s)", key, original, value));
@@ -73,9 +71,7 @@ public class KakasiTask implements SinkSource {
     public void initialize(Map<String, Object> metaData) {
         sink.initialize(metaData);
 
-        this.configuration = loader.load(configFile);
-
-        translator.init(configuration);
+        pipeline.init(configuration);
     }
 
 

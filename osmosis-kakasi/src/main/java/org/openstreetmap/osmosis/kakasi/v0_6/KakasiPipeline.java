@@ -21,11 +21,10 @@ import org.villseriol.kakasi.api.Kakasi;
 import org.villseriol.kakasi.api.KakasiConfig;
 
 
-public final class JpnToEng {
+public final class KakasiPipeline {
+    private static KakasiPipeline instance;
+
     private Logger logger = Logger.getLogger(this.getClass().getName());
-
-    private static JpnToEng instance;
-
     private TransformProxy pre = new TransformProxy();
     private TransformProxy post = new TransformProxy();
     private Transform combined = new SequenceTransformDecorator(
@@ -46,14 +45,14 @@ public final class JpnToEng {
 
     private KakasiConfig config = KakasiConfig.createDefaultConfig();
 
-    private JpnToEng() {
+    private KakasiPipeline() {
         super();
     }
 
 
-    public static JpnToEng getInstance() {
+    public static KakasiPipeline getInstance() {
         if (instance == null) {
-            instance = new JpnToEng();
+            instance = new KakasiPipeline();
         }
 
         return instance;

@@ -10,7 +10,7 @@ import org.openstreetmap.osmosis.core.pipeline.v0_6.SinkSourceManager;
 public class KakasiTaskFactory extends TaskManagerFactory {
     @Override
     protected TaskManager createTaskManagerImpl(TaskConfiguration taskConfig) {
-        String configFile = getStringArgument(taskConfig, "configFile");
+        String configFile = getStringArgument(taskConfig, "file", getDefaultStringArgument(taskConfig, "kakasi.xml"));
 
         return new SinkSourceManager(taskConfig.getId(), new KakasiTask(configFile), taskConfig.getPipeArgs());
     }
